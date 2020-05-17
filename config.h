@@ -173,7 +173,6 @@ static Key keys[] = {
     { MODKEY|ShiftMask,     XK_Print,	        spawn,		         SHCMD("dmenu_record kill") },
     { MODKEY,               XK_Scroll_Lock,	spawn,                   SHCMD("killall screenkey || screenkey &") },
     /* Function keys */
-    { MODKEY,               XK_F1,              spawn,                   SHCMD("groff -mom /usr/local/share/dwm/larbs.mom -Tpdf | zathura -") },
     { MODKEY,               XK_F3,              spawn,                   SHCMD("dmenu_display_options") },
     { MODKEY,               XK_F4,              spawn,                   SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)") },
     { MODKEY,               XK_F5,              xrdb,                    {.v = NULL } },
