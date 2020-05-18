@@ -146,6 +146,8 @@ static Key keys[] = {
     { MODKEY,               XK_x,               incrgaps,	         {.i = -3 } },
     { MODKEY,               XK_z,               incrgaps,	         {.i = +3 } },
     /* Punctuation keys */
+    { MODKEY,               XK_apostrophe,      togglescratch,           {.ui = 0} }, /* terminal scratchpad */
+    { MODKEY|ShiftMask,     XK_apostrophe,      togglescratch,           {.ui = 1} }, /* bc scratchpad */
     { MODKEY,               XK_BackSpace,       spawn,		         SHCMD("dmenu_system_functions") },
     { MODKEY|ShiftMask,     XK_BackSpace,       spawn,		         SHCMD("dmenu_system_functions") },
     { MODKEY,               XK_grave,	        spawn,		         SHCMD("dmenu_unicode") },
@@ -158,9 +160,7 @@ static Key keys[] = {
     { MODKEY,               XK_Tab,		view,		         {0} },
     { MODKEY,               XK_semicolon,	shiftview,	         { .i = 1 } },
     { MODKEY|ShiftMask,	    XK_semicolon,	shifttag,	         { .i = 1 } },
-    { MODKEY,               XK_apostrophe,	togglescratch,           {.ui = 1} },
     { MODKEY,               XK_Return,	        spawn,		         {.v = termcmd } },
-    { MODKEY|ShiftMask,	    XK_Return,	        togglescratch,           {.ui = 0} },
     /* Navigation keys */
     { MODKEY,               XK_Left,	        focusmon,	         {.i = -1 } },
     { MODKEY|ShiftMask,     XK_Left,	        tagmon,		         {.i = -1 } },
