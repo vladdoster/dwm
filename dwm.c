@@ -92,6 +92,7 @@ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast };       /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
+enum { DirHor, DirVer, DirRotHor, DirRotVer, DirLast };       /* tiling dirs */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast };                   /* clicks */
 
@@ -101,6 +102,11 @@ typedef union {
 	float f;
 	const void *v;
 } Arg;
+
+typedef struct {
+ unsigned int x, y, fx, fy, n, dir;
+ float fact;
+} Area;
 
 typedef struct {
 	unsigned int click;
@@ -145,16 +151,12 @@ typedef struct Pertag Pertag;
 
 struct Monitor {
 	char ltsymbol[16];
-	float mfact;
+//	float mfact;
 	int nmaster;
 	int num;
 	int by;               /* bar geometry */
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
-	int gappih;           /* horizontal gap between windows */
-	int gappiv;           /* vertical gap between windows */
-	int gappoh;           /* horizontal outer gaps */
-	int gappov;           /* vertical outer gaps */
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
@@ -241,10 +243,12 @@ static void scan(void);
 static int sendevent(Client *c, Atom proto);
 static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
+static void setdirs(const Arg *arg);
+static void setfacts(const Arg *arg);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setlayout(const Arg *arg);
-static void setmfact(const Arg *arg);
+//static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
@@ -257,6 +261,7 @@ static int stackpos(const Arg *arg);
 static void swapfocus(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
+static void tile(Monitor *);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglescratch(const Arg *arg);
@@ -337,13 +342,14 @@ static xcb_connection_t *xcon;
 #include "config.h"
 
 struct Pertag {
-	unsigned int curtag, prevtag; /* current and previous tag */
+	unsigned int curtag, prevtag;          /* current and previous tag */
 	Client *prevclient[LENGTH(tags) + 1];
-	int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
-	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
+	int nmasters[LENGTH(tags) + 1];        /* number of windows in master area */
+//	float mfacts[LENGTH(tags) + 1];        /* mfacts per tag */
+	Area areas[LENGTH(tags) + 1][3];       /* tiling areas */
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
-	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+	int showbars[LENGTH(tags) + 1];            /* display bar for the current tag */
 };
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
@@ -664,6 +670,7 @@ clientmessage(XEvent *e)
 {
 	XClientMessageEvent *cme = &e->xclient;
 	Client *c = wintoclient(cme->window);
+	int i;
 
 	if (!c)
 		return;
@@ -673,6 +680,10 @@ clientmessage(XEvent *e)
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ && !c->isfullscreen)));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
+                if(!ISVISIBLE(c)) {
+                for(i=0; !(c->tags & 1 << i); i++);
+                view(&(Arg){.ui = 1 << i});
+               }
 		if (c != selmon->sel && !c->isurgent)
 			seturgent(c, 1);
 	}
@@ -794,17 +805,14 @@ Monitor *
 createmon(void)
 {
 	Monitor *m;
-	unsigned int i;
+//	unsigned int i;
+	unsigned int i, j;
 	m = ecalloc(1, sizeof(Monitor));
 	m->tagset[0] = m->tagset[1] = 1;
-	m->mfact = mfact;
+//	m->mfact = mfact;
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
-	m->gappih = gappih;
-	m->gappiv = gappiv;
-	m->gappoh = gappoh;
-	m->gappov = gappov;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -813,7 +821,12 @@ createmon(void)
 
 	for (i = 0; i <= LENGTH(tags); i++) {
 		m->pertag->nmasters[i] = m->nmaster;
-		m->pertag->mfacts[i] = m->mfact;
+//		m->pertag->mfacts[i] = m->mfact;
+		/* init tiling dirs and facts */
+		for(j = 0; j < 3; j++) {
+			m->pertag->areas[i][j].dir = MIN(dirs[j], ((int[]){ 3, 1, 1 }[j]));
+			m->pertag->areas[i][j].fact = TRUNC(facts[j], 0.1, 10);
+		}
 
 		m->pertag->ltidxs[i][0] = m->lt[0];
 		m->pertag->ltidxs[i][1] = m->lt[1];
@@ -1325,17 +1338,18 @@ maprequest(XEvent *e)
 void
 monocle(Monitor *m)
 {
-	unsigned int n;
-	int oh, ov, ih, iv;
-	Client *c;
-
-	getgaps(m, &oh, &ov, &ih, &iv, &n);
-
-	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
-		resize(c, m->wx + ov, m->wy + oh, m->ww - 2 * c->bw - 2 * ov, m->wh - 2 * c->bw - 2 * oh, 0);
+	unsigned int n = 0;
+    	Client *c;
+    
+    	for (c = m->clients; c; c = c->next)
+    		if (ISVISIBLE(c))
+    			n++;
+    	if (n > 0) /* override layout symbol */
+    		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
+    	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
+    		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
+
 
 void
 motionnotify(XEvent *e)
@@ -1690,6 +1704,33 @@ setclientstate(Client *c, long state)
 		PropModeReplace, (unsigned char *)data, 2);
 }
 
+
+void
+setdirs(const Arg *arg) {
+	int *dirs = (int *)arg->v, i, n;
+	Area *areas = selmon->pertag->areas[selmon->pertag->curtag];
+
+	for(i = 0; i < 3; i++) {
+		n = (int[]){ 4, 2, 2 }[i];
+		areas[i].dir = ISINC(dirs[i]) ?
+			MOD((int)areas[i].dir + GETINC(dirs[i]), n) : TRUNC(dirs[i], 0, n - 1);
+	}
+	arrange(selmon);
+}
+
+void
+setfacts(const Arg *arg) {
+	float *facts = (float *)arg->v;
+	Area *areas = selmon->pertag->areas[selmon->pertag->curtag];
+	int i;
+
+	for(i = 0; i < 3; i++)
+		areas[i].fact = TRUNC(ISINC(facts[i]) ?
+			areas[i].fact + GETINC(facts[i]) : facts[i], 0.1, 10);
+	arrange(selmon);
+}
+
+
 int
 sendevent(Client *c, Atom proto)
 {
@@ -1802,20 +1843,20 @@ setlayout(const Arg *arg)
 }
 
 /* arg > 1.0 will set mfact absolutely */
-void
-setmfact(const Arg *arg)
-{
-	float f;
-
-	if (!arg || !selmon->lt[selmon->sellt]->arrange)
-		return;
-	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
-	if (f < 0.1 || f > 0.9)
-		return;
-	// selmon->mfact = f;
-	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = f;
-	arrange(selmon);
-}
+//void
+//setmfact(const Arg *arg)
+//{
+//	float f;
+//
+//	if (!arg || !selmon->lt[selmon->sellt]->arrange)
+//		return;
+//	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
+//	if (f < 0.1 || f > 0.9)
+//		return;
+//	// selmon->mfact = f;
+//	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = f;
+//	arrange(selmon);
+//}
 
 void
 setup(void)
@@ -2019,6 +2060,67 @@ tag(const Arg *arg)
 	}
 }
 
+
+void
+tile(Monitor *m)
+ {
+//	unsigned int i, n, h, mw, my, ty;
+ 	Client *c;
+ 
+	Area *ga = m->pertag->areas[m->pertag->curtag], *ma = ga + 1, *sa = ga + 2, *a;
+	unsigned int n, i, w, h, g, ms, ss;
+	float f;
+ 
+	/* print layout symbols */
+	snprintf(m->ltsymbol, sizeof m->ltsymbol, "%c%c%c",
+		(char[]){ '<', '^', '>', 'v' }[ga->dir],
+		(char[]){ '-', '|' }[ma->dir],
+		(char[]){ '-', '|' }[sa->dir]);
+
+	/* calculate number of clients */
+ 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+ 	if (n == 0)
+ 		return;
+ 
+//-	if (n > m->nmaster)
+//-		mw = m->nmaster ? m->ww * m->mfact : 0;
+	ma->n = MIN(n, m->nmaster), sa->n = n - ma->n;
+	/* calculate area rectangles */
+	f = ma->n == 0 ? 0 : (sa->n == 0 ? 1 : ga->fact / 2);
+	g = ma->n == 0 || sa->n == 0 ? 0 : gappx;
+	if(ga->dir == DirHor || ga->dir == DirRotHor)
+                ms = f * (m->ww - g), ss = m->ww - ms - g,
+                ma->x = ga->dir == DirHor ? 0 : ss + g, ma->y = 0, ma->fx = ma->x + ms, ma->fy = m->wh,
+                sa->x = ga->dir == DirHor ? ms + g: 0, sa->y = 0, sa->fx = sa->x + ss, sa->fy = m->wh;
+ 	else
+//-		mw = m->ww;
+//-	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+//-		if (i < m->nmaster) {
+//-			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
+//-			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
+//-			if (my + HEIGHT(c) < m->wh)
+//-				my += HEIGHT(c);
+//-		} else {
+//-			h = (m->wh - ty) / (n - i);
+//-			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
+//-			if (ty + HEIGHT(c) < m->wh)
+//-				ty += HEIGHT(c);
+//-		}
+                ms = f * (m->wh - g), ss = m->wh - ms - g,
+                ma->x = 0, ma->y = ga->dir == DirVer ? 0 : ss + g, ma->fx = m->ww, ma->fy = ma->y + ms,
+                sa->x = 0, sa->y = ga->dir == DirVer ? ms + g : 0, sa->fx = m->ww, sa->fy = sa->y + ss;
+	/* tile clients */
+	for(c = nexttiled(m->clients), i = 0; i < n; c = nexttiled(c->next), i++) {
+		a = ma->n > 0 ? ma : sa;
+		f = i == 0 || ma->n == 0 ? a->fact : 1, f /= --a->n + f;
+                w = a->dir == DirVer ? a->fx - a->x : f * (a->fx - a->x - a->n * gappx);
+                h = a->dir == DirHor ? a->fy - a->y : f * (a->fy - a->y - a->n * gappx);;
+		resize(c, m->wx + a->x, m->wy + a->y, w - 2 * c->bw, h - 2 * c->bw, False);
+                a->x += a->dir == DirHor ? w + gappx : 0;
+                a->y += a->dir == DirVer ? h + gappx : 0;
+	}
+ }
+
 void
 tagmon(const Arg *arg)
 {
@@ -2130,7 +2232,7 @@ toggleview(const Arg *arg)
 		}
 		/* apply settings for this view */
 		selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
-		selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+//		selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
 		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 		selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 		selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
@@ -2472,7 +2574,7 @@ view(const Arg *arg)
 	}
 	Client *unmodified = selmon->pertag->prevclient[selmon->pertag->curtag];
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag];
-	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
+//	selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag];
 	selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
 	selmon->lt[selmon->sellt] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt];
 	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
