@@ -2,7 +2,7 @@
 
 /* Appearance */
 static const unsigned int borderpx  = 3;   /* border pixel of windows */
-static const unsigned int gappx     = 1;        /* gap pixel between windows */
+static const unsigned int gappx     = 5;   /* gap pixel between windows */
 static const unsigned int snap      = 32;  /* snap pixel */
 static const int swallowfloating    = 0;   /* 1 means swallow floating windows by default */
 static const int showbar            = 1;   /* 0 means no bar */
@@ -13,7 +13,7 @@ static char normbgcolor[]           = "#1c1c1c";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
 static char selfgcolor[]            = "#ffffff";
-static char selbordercolor[]        = "#770000";
+static char selbordercolor[]        = "#9d0006";
 static char selbgcolor[]            = "#484848";
 static char *colors[][3] = {
                       /*   fg            bg           border     */
@@ -21,7 +21,7 @@ static char *colors[][3] = {
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
        /* color bar */
        [SchemeStatus]   = { "#000000", "#5F6A6A", "#000000" }, // statusbar right
-       [SchemeTagsSel]  = { "#000000", "#a89984", "#000000" }, // tag bar left selected
+       [SchemeTagsSel]  = { "#000000", "#076678", "#1c1c1c" }, // tag bar left selected
        [SchemeTagsNorm] = { "#000000", "#5F6A6A", "#000000" }, // tag bar left unselected
        [SchemeInfoSel]  = { "#000000", "#5F6A6A", "#000000" }, // info bar middle  selected
        [SchemeInfoNorm] = { "#000000", "#5F6A6A", "#000000" }, // info bar middle  unselected
@@ -51,15 +51,15 @@ static const Rule rules[] = {
 };
 
 /* Layout(s) */
-//static const float mfact     = 0.50; /* factor of master area size */
 static const int dirs[3]      = { DirHor, DirVer, DirVer }; /* tiling dirs */
-static const float facts[3]   = { 1.1,    1.1,    1.1 };    /* tiling facts */static const int nmaster     = 1;    /* number of clients in master area */
+static const float facts[3]   = { 1.1,    1.1,    1.1 };    /* tiling facts */
+static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-#define FORCE_VSPLIT 1  	         /* nrowgrid layout: force two clients to always split vertically */
+#define FORCE_VSPLIT 1  	     /* nrowgrid layout: force two clients to always split vertically */
 static const Layout layouts[] = {
 	{ "[tiled]", 	   tile },   /* Master on left, slaves on right */
  	{ "[monocle]", 	   monocle },/* All windows on top of eachother */
-	{  NULL,	   NULL },   /* Description here would be pointless */
+	{  NULL,	   NULL },   /* Description here would be point(er)less */
 };
 
 /* Key definitions */
@@ -89,7 +89,7 @@ static const char *termcmd[]  = { "st", NULL };
 #include <X11/XF86keysym.h>
 #include "shiftview.c"
 static Key keys[] = {
-    /* modifier             key       function              argument */
+    /* modifier             key            function              argument */
     STACKKEYS(MODKEY,                       focus)
     STACKKEYS(MODKEY|ShiftMask,              push)
     /* Layout bindings  */
@@ -105,7 +105,7 @@ static Key keys[] = {
     { MODKEY,               XK_0,               view,                    {.ui = ~0 } },
     { MODKEY|ShiftMask,     XK_0,               tag,                     {.ui = ~0 } },
     { MODKEY,               XK_t,               setlayout,               {.v = &layouts[0]} }, /* tile */
-    { MODKEY|ShiftMask,     XK_u,               setlayout,               {.v = &layouts[5]} }, /* monocle */
+    { MODKEY|ShiftMask,     XK_u,               setlayout,               {.v = &layouts[1]} }, /* monocle */
     TILEKEYS(MODKEY,                            1, 0, 0)
     TILEKEYS(MODKEY|ShiftMask,                  0, 1, 0)
     TILEKEYS(MODKEY|ControlMask,                0, 0, 1)
@@ -117,6 +117,8 @@ static Key keys[] = {
     { MODKEY,               XK_f,               togglefullscr,           {0} },
     { MODKEY,               XK_g,               shiftview,	         { .i = -1 } },
     { MODKEY|ShiftMask,     XK_g,               shifttag,	         { .i = -1 } },
+    { MODKEY|ShiftMask,     XK_l,               setdirs,                 {.v = (int[]){ DirHor, DirVer, DirVer } } },
+    { MODKEY|ControlMask,   XK_l,               setdirs,                 {.v = (int[]){ DirVer, DirHor, DirHor } } },
     { MODKEY,               XK_m,               spawn,		         SHCMD("dmenu_music_options") },
     { MODKEY|ShiftMask,     XK_m,               spawn,		         SHCMD("pamixer --toggle-mute; kill -44 $(pidof dwmblocks)") },
     { MODKEY,               XK_n,               spawn,		         SHCMD("st -e nvim -c VimwikiIndex") },
@@ -145,8 +147,6 @@ static Key keys[] = {
     { MODKEY,               XK_semicolon,	shiftview,	         { .i = 1 } },
     { MODKEY|ShiftMask,	    XK_semicolon,       shifttag,	         { .i = 1 } },
     { MODKEY,               XK_t,               spawn,		         {.v = termcmd } },
-    { MODKEY|ShiftMask,     XK_t,               setdirs,                 {.v = (int[]){ DirHor, DirVer, DirVer } } },
-    { MODKEY|ControlMask,   XK_t,               setdirs,                 {.v = (int[]){ DirVer, DirHor, DirHor } } },
     /* Navigation keys */
     { MODKEY,               XK_Left,	        focusmon,	         {.i = -1 } },
     { MODKEY|ShiftMask,     XK_Left,	        tagmon,		         {.i = -1 } },
