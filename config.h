@@ -89,7 +89,7 @@ static const char *termcmd[]  = { "st", NULL };
 #include <X11/XF86keysym.h>
 #include "shiftview.c"
 static Key keys[] = {
-    /* modifier             key            function              argument */
+    /* modifier             key            function                    argument */
     STACKKEYS(MODKEY,                       focus)
     STACKKEYS(MODKEY|ShiftMask,              push)
     /* Layout bindings  */
@@ -102,21 +102,25 @@ static Key keys[] = {
     TAGKEYS(                XK_7,               6)
     TAGKEYS(                XK_8,               7)
     TAGKEYS(                XK_9,               8)
-    { MODKEY,               XK_0,               view,                    {.ui = ~0 } },
-    { MODKEY|ShiftMask,     XK_0,               tag,                     {.ui = ~0 } },
-    { MODKEY,               XK_t,               setlayout,               {.v = &layouts[0]} }, /* tile */
-    { MODKEY|ShiftMask,     XK_u,               setlayout,               {.v = &layouts[1]} }, /* monocle */
+    /* Xtile bindings  */
     TILEKEYS(MODKEY,                            1, 0, 0)
     TILEKEYS(MODKEY|ShiftMask,                  0, 1, 0)
     TILEKEYS(MODKEY|ControlMask,                0, 0, 1)
     TILEKEYS(MODKEY|ShiftMask|ControlMask,      1, 1, 1)
+    { MODKEY,               XK_0,               view,                    {.ui = ~0 } },
+    { MODKEY|ShiftMask,     XK_0,               tag,                     {.ui = ~0 } },
+    { MODKEY,               XK_t,               setlayout,               {.v = &layouts[0]} }, /* tile */
+    { MODKEY|ShiftMask,     XK_u,               setlayout,               {.v = &layouts[1]} }, /* monocle */
     /* Alphabetic keys */
     { MODKEY,               XK_b,               togglebar,	         {0} },
     { MODKEY,               XK_c,               killclient,	         {0} },
     { MODKEY,               XK_d,               spawn,                   {.v = dmenucmd } },
-    { MODKEY,               XK_f,               togglefullscr,           {0} },
+    { MODKEY,               XK_e,               spawn,		         SHCMD("st -e nvim") },
+    { MODKEY,               XK_f,               spawn,		         SHCMD("st -e ranger") },
+    { MODKEY|ShiftMask,     XK_f,               togglefullscr,           {0} },
     { MODKEY,               XK_g,               shiftview,	         { .i = -1 } },
     { MODKEY|ShiftMask,     XK_g,               shifttag,	         { .i = -1 } },
+    { MODKEY|ShiftMask,	    XK_h,               spawn,		         SHCMD("st -e htop") },
     { MODKEY|ShiftMask,     XK_l,               setdirs,                 {.v = (int[]){ DirHor, DirVer, DirVer } } },
     { MODKEY|ControlMask,   XK_l,               setdirs,                 {.v = (int[]){ DirVer, DirHor, DirHor } } },
     { MODKEY,               XK_m,               spawn,		         SHCMD("dmenu_music_options") },
@@ -124,11 +128,8 @@ static Key keys[] = {
     { MODKEY,               XK_n,               spawn,		         SHCMD("st -e nvim -c VimwikiIndex") },
     { MODKEY,               XK_o,               incnmaster,              {.i = +1 } },
     { MODKEY|ShiftMask,	    XK_o,               incnmaster,              {.i = -1 } },
-    { MODKEY,               XK_r,               spawn,		         SHCMD("st -e ranger") },
-    { MODKEY|ShiftMask,	    XK_r,               spawn,		         SHCMD("st -e htop") },
     { MODKEY,               XK_s,               swapfocus,               {.i = -1 } },
     { MODKEY|ShiftMask,     XK_s,               togglesticky,            {0} },
-    { MODKEY,               XK_v,               spawn,		         SHCMD("st -e nvim") },
     { MODKEY,               XK_w,               spawn,		         SHCMD("$BROWSER") },
     { MODKEY|ShiftMask,	    XK_w,               spawn,		         SHCMD("st -e sudo nmtui") },
     /* Punctuation keys */
