@@ -16,7 +16,7 @@ This is suckless, the source code is the documentation! Check out [config.h](con
      - xtile
      - monocle
      - true fullscreen (prevents focus shifting)
-- DWM blocks: Statusbar with my build of [dwmblocks](https://github.com/vladdoster/dwm-blocks).
+- DWM blocks: Statusbar with my build of [dwm blocks](https://github.com/vladdoster/dwm-blocks).
 - XRDB: Read colors from xrdb (.Xresources) at run time.
 - Scratchpads: Allows you to spawn or restore a floating terminal windows.
 - Sticky: A sticky client is visible on all tags.
