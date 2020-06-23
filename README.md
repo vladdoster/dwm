@@ -28,4 +28,5 @@ This is suckless, the source code is the documentation! Check out [config.h](con
 - Color bar: Change the foreground and background color of every statusbar element.
 - No border: No border if single window on tag
 - Per tag layout: Keeps layout, mwfact, barpos and nmaster per tag.
-
+- Cycle layouts: Cycles through all avaiable layouts
+- X-tile: Generalization of the tile layout which adds two attributes (direction and fact) to three areas (global,                 master, stack). The global area is the entire allocatable visual space and it's subdivided into the master and           stack subareas.
