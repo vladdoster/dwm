@@ -57,7 +57,7 @@ static Sp scratchpads[] = {
 /* Tags */
 static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 static const Rule rules[] = {
-    /* class   instance      title       tags mask  isfloating  isterminal  noswallow  monitor */
+    /* class   instance       title       tags mask  isfloating  isterminal  noswallow  monitor */
     { "St",       NULL,        NULL,          0,         0,          1,          0,       -1 },
     { NULL,       NULL,    "Event Tester",    0,         0,          0,          1,       -1 },
     { NULL,     "sp_term",     NULL,       SPTAG(0),     1,          1,          0,       -1 },
@@ -75,7 +75,7 @@ static const int   resizehints = 1;                        /* 1 means respect si
 static const Layout layouts[] = {
     {"[tile]",    tile},    /* Master on left, slaves on right */
     {"[monocle]", monocle}, /* All windows on top of eachother */
-    {"[float]",      NULL}, /* Description here would be point(er)less */
+    {"[float]",   NULL},    /* Description here would be point(er)less */
 };
 
 /* Key definitions */
@@ -134,9 +134,9 @@ static Key keys[] = {
     /*-----------------*/
     /* modifier            key              function             argument  */
     /* A */
-    /* B  */
+    /* B */
     {MODKEY,               XK_b,             togglebar,          {0}},
-    /* C  */
+    /* C */
     {MODKEY,               XK_c,             killclient,         {0}},
     /* D */
     {MODKEY,               XK_d,             spawn,              {.v = dmenucmd}},
@@ -181,7 +181,7 @@ static Key keys[] = {
     /* ' */
     {MODKEY,               XK_apostrophe,    togglescratch,      {.ui = 0}}, /* terminal scratchpad */
     {MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* file manager scratchpad */
-    /* Backspace */
+    /* backspace */
     {MODKEY,               XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
     {MODKEY | ShiftMask,   XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
     /* ` */
