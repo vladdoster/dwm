@@ -150,6 +150,8 @@ static Key keys[] = {
     { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* L */
+    { MODKEY | ShiftMask,   XK_l,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
+    { MODKEY | ControlMask, XK_l,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
@@ -169,8 +171,6 @@ static Key keys[] = {
     { MODKEY | ShiftMask,   XK_u,             spawn,              SHCMD("st -e htop") },
     /* W */
     { MODKEY,               XK_w,             spawn,              SHCMD("$BROWSER") },
-    { MODKEY | ShiftMask,   XK_w,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
-    { MODKEY | ControlMask, XK_w,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /*--------------*/
     /* Numbers keys */
     /*--------------*/
