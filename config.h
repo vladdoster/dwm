@@ -28,14 +28,14 @@ static char selbordercolor[]  = "#9d0006";
 static char selbgcolor[]      = "#484848";
 static char *colors[][3] = {
                     /*   fg           bg            border   */
-    [SchemeNorm] =  {normfgcolor, normbgcolor, normbordercolor},
-    [SchemeSel]  =  {selfgcolor,  selbgcolor,  selbordercolor},
+    [SchemeNorm] =  { normfgcolor, normbgcolor, normbordercolor },
+    [SchemeSel]  =  { selfgcolor,  selbgcolor,  selbordercolor },
     /* color bar */
-    [SchemeStatus]   = {"#000000", "#5F6A6A", "#000000"}, // statusbar right
-    [SchemeTagsSel]  = {"#000000", "#076678", "#1c1c1c"}, // tag bar left selected
-    [SchemeTagsNorm] = {"#000000", "#5F6A6A", "#000000"}, // tag bar left unselected
-    [SchemeInfoSel]  = {"#000000", "#5F6A6A", "#000000"}, // info bar middle  selected
-    [SchemeInfoNorm] = {"#000000", "#5F6A6A", "#000000"}, // info bar middle  unselected
+    [SchemeStatus]   = { "#000000", "#5F6A6A", "#000000" }, // statusbar right
+    [SchemeTagsSel]  = { "#000000", "#076678", "#1c1c1c" }, // tag bar left selected
+    [SchemeTagsNorm] = { "#000000", "#5F6A6A", "#000000" }, // tag bar left unselected
+    [SchemeInfoSel]  = { "#000000", "#5F6A6A", "#000000" }, // info bar middle  selected
+    [SchemeInfoNorm] = { "#000000", "#5F6A6A", "#000000" }, // info bar middle  unselected
 };
 
 /*-------------*/
@@ -46,16 +46,16 @@ typedef struct {
   const void *cmd;
 } Sp;
 
-const char *sp_term[] = {"st", "-n", "st",     "-g", "120x34", NULL};
-const char *sp_fm[]   = {"st", "-n", "ranger", "-g", "120x50", "-e", "ranger", NULL};
+const char *sp_term[] = { "st", "-n", "st",     "-g", "120x34", NULL };
+const char *sp_fm[]   = { "st", "-n", "ranger", "-g", "120x50", "-e", "ranger", NULL };
 static Sp scratchpads[] = {
     /* name         cmd  */
-    {"sp_term",   sp_term},
-    {"sp_fm",     sp_fm},
+    { "sp_term",   sp_term },
+    { "sp_fm",     sp_fm },
 };
 
 /* Tags */
-static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const Rule rules[] = {
     /* class   instance       title       tags mask  isfloating  isterminal  noswallow  monitor */
     { "St",       NULL,        NULL,          0,         0,          1,          0,       -1 },
@@ -65,17 +65,17 @@ static const Rule rules[] = {
 };
 
 /* Layout(s) */
-static const int   dirs[3]     = {DirHor, DirVer, DirVer}; /* tiling dirs */
-static const float facts[3]    = {1.1, 1.1, 1.1};          /* tiling facts */
+static const int   dirs[3]     = { DirHor, DirVer, DirVer }; /* tiling dirs */
+static const float facts[3]    = { 1.1, 1.1, 1.1 };          /* tiling facts */
 static const int   nmaster     = 1;                        /* number of clients in master area */
 static const int   resizehints = 1;                        /* 1 means respect size hints in tiled resizals */
 
 #define FORCE_VSPLIT  1 /* nrowgrid layout: force two clients to always split vertically */
 
 static const Layout layouts[] = {
-    {"[tile]",    tile},    /* Master on left, slaves on right */
-    {"[monocle]", monocle}, /* All windows on top of eachother */
-    {"[float]",   NULL},    /* Description here would be point(er)less */
+    { "[tile]",    tile },    /* Master on left, slaves on right */
+    { "[monocle]", monocle }, /* All windows on top of eachother */
+    { "[float]",   NULL },    /* Description here would be point(er)less */
 };
 
 /* Key definitions */
@@ -103,12 +103,12 @@ static const Layout layouts[] = {
 
 /* Commands */
 static char       dmenumon[2] = "0";
-static const char *dmenucmd[] = {"dmenu_run", "-m",  dmenumon,    "-fn", dmenufont, "-nb",
-                                 normbgcolor, "-nf", selbgcolor,  "-sf",
-                                 normfgcolor, "-sb", selfgcolor,  NULL};
+static const char *dmenucmd[] = { "dmenu_run", "-m",  dmenumon,    "-fn", dmenufont, "-nb",
+                                  normbgcolor, "-nf", selbgcolor,  "-sf",
+                                  normfgcolor, "-sb", selfgcolor,  NULL };
 
 /* Terminal */
-static const char *termcmd[]  = {"st", NULL};
+static const char *termcmd[]  = { "st", NULL };
 
 #include "shiftview.c"
 #include <X11/XF86keysym.h>
@@ -135,120 +135,120 @@ static Key keys[] = {
     /* modifier            key              function             argument  */
     /* A */
     /* B */
-    {MODKEY,               XK_b,             togglebar,          {0}},
+    { MODKEY,               XK_b,             togglebar,          {0} },
     /* C */
-    {MODKEY,               XK_c,             killclient,         {0}},
+    { MODKEY,               XK_c,             killclient,         {0} },
     /* D */
-    {MODKEY,               XK_d,             spawn,              {.v = dmenucmd}},
+    { MODKEY,               XK_d,             spawn,              {.v = dmenucmd} },
     /* E */
-    {MODKEY,               XK_e,             spawn,              SHCMD("st -e nvim")},
+    { MODKEY,               XK_e,             spawn,              SHCMD("st -e nvim") },
     /* F */
-    {MODKEY,               XK_f,             setlayout,          {.v = &layouts[2]} },
-    {MODKEY | ControlMask, XK_f,             spawn,              SHCMD("st -e ranger")},
-    {MODKEY | ShiftMask,   XK_f,             togglefullscr,      {0}},
+    { MODKEY,               XK_f,             setlayout,          {.v = &layouts[2]} },
+    { MODKEY | ControlMask, XK_f,             spawn,              SHCMD("st -e ranger") },
+    { MODKEY | ShiftMask,   XK_f,             togglefullscr,      {0} },
     /* G */
-    {MODKEY,               XK_g,             shiftview,          {.i = -1}},
-    {MODKEY | ShiftMask,   XK_g,             shifttag,           {.i = -1}},
-    /* H */
-    {MODKEY | ShiftMask,   XK_h,             spawn,              SHCMD("st -e htop")},
+    { MODKEY,               XK_g,             shiftview,          {.i = -1} },
+    { MODKEY | ShiftMask,   XK_g,             shifttag,           {.i = -1} },
     /* L */
-    {MODKEY | ShiftMask,   XK_l,             setdirs,            {.v = (int[]){DirHor, DirVer, DirVer}}},
-    {MODKEY | ControlMask, XK_l,             setdirs,            {.v = (int[]){DirVer, DirHor, DirHor}}},
+    { MODKEY | ShiftMask,   XK_l,             setdirs,            {.v = (int[]){DirHor, DirVer, DirVer}} },
+    { MODKEY | ControlMask, XK_l,             setdirs,            {.v = (int[]){DirVer, DirHor, DirHor}} },
     /* M */
-    {MODKEY,               XK_m,             setlayout,          {.v = &layouts[1]}},  
-    {MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options")},
-    {MODKEY | ShiftMask,   XK_m,             spawn,              SHCMD("pamixer --toggle-mute; kill -44 $(pidof dwmblocks)")},
+    { MODKEY,               XK_m,             setlayout,          {.v = &layouts[1]} },  
+    { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
+    { MODKEY | ShiftMask,   XK_m,             spawn,              SHCMD("pamixer --toggle-mute; kill -44 $(pidof dwmblocks)") },
     /* N */
-    {MODKEY,               XK_n,             spawn,              SHCMD("st -e nvim -c VimwikiIndex")},
+    { MODKEY,               XK_n,             spawn,              SHCMD("st -e nvim -c VimwikiIndex") },
     /* O */
-    {MODKEY,               XK_o,             incnmaster,         {.i = +1}},
-    {MODKEY | ShiftMask,   XK_o,             incnmaster,         {.i = -1}},
+    { MODKEY,               XK_o,             incnmaster,         {.i = +1} },
+    { MODKEY | ShiftMask,   XK_o,             incnmaster,         {.i = -1} },
     /* S */
-    {MODKEY,               XK_s,             swapfocus,          {.i = -1}},
-    {MODKEY | ShiftMask,   XK_s,             togglesticky,       {0}},
+    { MODKEY,               XK_s,             swapfocus,          { .i = -1}},
+    { MODKEY | ShiftMask,   XK_s,             togglesticky,       {0} },
     /* T */
-    {MODKEY,               XK_t,             spawn,              {.v = termcmd}},
-    {MODKEY | ShiftMask,   XK_t,             setlayout,          {.v = &layouts[0]} },
+    { MODKEY,               XK_t,             spawn,              {.v = termcmd} },
+    { MODKEY | ShiftMask,   XK_t,             setlayout,          {.v = &layouts[0]} },
+    /* U */
+    { MODKEY | ShiftMask,   XK_u,             spawn,              SHCMD("st -e htop") },
     /* W */
-    {MODKEY,               XK_w,             spawn,              SHCMD("$BROWSER")},
-    {MODKEY | ShiftMask,   XK_w,             spawn,              SHCMD("st -e sudo nmtui")},
+    { MODKEY,               XK_w,             spawn,              SHCMD("$BROWSER") },
+    { MODKEY | ShiftMask,   XK_w,             spawn,              SHCMD("st -e sudo nmtui") },
     /*--------------*/
     /* Numbers keys */
     /*--------------*/
-    {MODKEY,               XK_0,             view,               {.ui = ~0}},
-    {MODKEY | ShiftMask,   XK_0,             tag,                {.ui = ~0}},
+    { MODKEY,               XK_0,             view,               {.ui = ~0} },
+    { MODKEY | ShiftMask,   XK_0,             tag,                {.ui = ~0} },
     /* Punctuation keys */
     /* ' */
-    {MODKEY,               XK_apostrophe,    togglescratch,      {.ui = 0}}, /* terminal scratchpad */
-    {MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* file manager scratchpad */
+    { MODKEY,               XK_apostrophe,    togglescratch,      {.ui = 0}}, /* terminal scratchpad */
+    { MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* file manager scratchpad */
     /* backspace */
-    {MODKEY,               XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
-    {MODKEY | ShiftMask,   XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
+    { MODKEY,               XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions") },
+    { MODKEY | ShiftMask,   XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions") },
     /* ` */
-    {MODKEY,               XK_grave,         spawn,              SHCMD("dmenu_unicode")},
+    { MODKEY,               XK_grave,         spawn,              SHCMD("dmenu_unicode") },
     /* - */
-    {MODKEY,               XK_minus,         spawn,              SHCMD("pamixer -d 5;  kill -44 $(pidof dwmblocks)")},
-    {MODKEY | ShiftMask,   XK_minus,         spawn,              SHCMD("pamixer -d 15; kill -44 $(pidof dwmblocks)")},
+    { MODKEY,               XK_minus,         spawn,              SHCMD("pamixer -d 5;  kill -44 $(pidof dwmblocks)") },
+    { MODKEY | ShiftMask,   XK_minus,         spawn,              SHCMD("pamixer -d 15; kill -44 $(pidof dwmblocks)") },
     /* = */
-    {MODKEY,               XK_equal,         spawn,              SHCMD("pamixer -i 5;  kill -44 $(pidof dwmblocks)")},
-    {MODKEY | ShiftMask,   XK_equal,         spawn,              SHCMD("pamixer -i 15; kill -44 $(pidof dwmblocks)")},
+    { MODKEY,               XK_equal,         spawn,              SHCMD("pamixer -i 5;  kill -44 $(pidof dwmblocks)") },
+    { MODKEY | ShiftMask,   XK_equal,         spawn,              SHCMD("pamixer -i 15; kill -44 $(pidof dwmblocks)") },
     /* space */
-    {MODKEY,               XK_space,         zoom,               {0}},
-    {MODKEY | ShiftMask,   XK_space,         togglefloating,     {0}},
+    { MODKEY,               XK_space,         zoom,               {0} },
+    { MODKEY | ShiftMask,   XK_space,         togglefloating,     {0} },
     /* tab */
-    {MODKEY,               XK_Tab,           view,               {0}},
+    { MODKEY,               XK_Tab,           view,               {0} },
     /* ; */
-    {MODKEY,               XK_semicolon,     shiftview,          {.i = 1}},
-    {MODKEY | ShiftMask,   XK_semicolon,     shifttag,           {.i = 1}},
+    { MODKEY,               XK_semicolon,     shiftview,          {.i = 1} },
+    { MODKEY | ShiftMask,   XK_semicolon,     shifttag,           {.i = 1} },
     /*-----------------*/
     /* Navigation keys */
     /*-----------------*/
     /* left arrow */
-    {MODKEY,               XK_Left,          focusmon,           {.i = -1}},
-    {MODKEY | ShiftMask,   XK_Left,          tagmon,             {.i = -1}},
+    { MODKEY,               XK_Left,          focusmon,           {.i = -1} },
+    { MODKEY | ShiftMask,   XK_Left,          tagmon,             {.i = -1} },
     /* right arrow */
-    {MODKEY,               XK_Right,         focusmon,           {.i = +1}},
-    {MODKEY | ShiftMask,   XK_Right,         tagmon,             {.i = +1}},
+    { MODKEY,               XK_Right,         focusmon,           {.i = +1} },
+    { MODKEY | ShiftMask,   XK_Right,         tagmon,             {.i = +1} },
     /* page up */
-    {MODKEY,               XK_Page_Up,       shiftview,          {.i = -1}},
-    {MODKEY | ShiftMask,   XK_Page_Up,       shifttag,           {.i = -1}},
+    { MODKEY,               XK_Page_Up,       shiftview,          {.i = -1} },
+    { MODKEY | ShiftMask,   XK_Page_Up,       shifttag,           {.i = -1} },
     /* page down */
-    {MODKEY,               XK_Page_Down,     shiftview,          {.i = +1}},
-    {MODKEY | ShiftMask,   XK_Page_Down,     shifttag,           {.i = +1}},
+    { MODKEY,               XK_Page_Down,     shiftview,          {.i = +1} },
+    { MODKEY | ShiftMask,   XK_Page_Down,     shifttag,           {.i = +1} },
     /* insert */
-    {MODKEY,               XK_Insert,        spawn,              SHCMD("show_clipboard_contents")},
+    { MODKEY,               XK_Insert,        spawn,              SHCMD("show_clipboard_contents") },
     /* print screen */
-    {0,                    XK_Print,         spawn,              SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png")},
-    {ShiftMask,            XK_Print,         spawn,              SHCMD("dmenu_maim_pick")},
-    {MODKEY,               XK_Print,         spawn,              SHCMD("dmenu_record")},
-    {MODKEY | ShiftMask,   XK_Print,         spawn,              SHCMD("dmenu_record kill")},
+    { 0,                    XK_Print,         spawn,              SHCMD("maim pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+    { ShiftMask,            XK_Print,         spawn,              SHCMD("dmenu_maim_pick") },
+    { MODKEY,               XK_Print,         spawn,              SHCMD("dmenu_record") },
+    { MODKEY | ShiftMask,   XK_Print,         spawn,              SHCMD("dmenu_record kill") },
     /* scroll lock */
-    {MODKEY,               XK_Scroll_Lock,   spawn,              SHCMD("killall screenkey || screenkey &")},
+    { MODKEY,               XK_Scroll_Lock,   spawn,              SHCMD("killall screenkey || screenkey &") },
     /* Function keys */
-    {MODKEY,               XK_F3,            spawn,              SHCMD("dmenu_display_options")},
-    {MODKEY,               XK_F4,            spawn,              SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)")},
-    {MODKEY,               XK_F5,            xrdb,               {.v = NULL}},
+    { MODKEY,               XK_F3,            spawn,              SHCMD("dmenu_display_options") },
+    { MODKEY,               XK_F4,            spawn,              SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)") },
+    { MODKEY,               XK_F5,            xrdb,               {.v = NULL} },
 };
 /*--------------------*/
 /* Button definitions */
 /*--------------------*/
 static Button buttons[] = {
-    /* click            event mask      btn       function        arg */
-    {ClkClientWin,        MODKEY,     Button1,    movemouse,      {0}},
-    {ClkClientWin,        MODKEY,     Button3,    resizemouse,    {0}},
-    {ClkRootWin,            0,        Button2,    togglebar,      {0}},
-    {ClkStatusText,         0,        Button1,    sigdwmblocks,   {.i = 1}},
-    {ClkStatusText,         0,        Button2,    sigdwmblocks,   {.i = 2}},
-    {ClkStatusText,         0,        Button3,    sigdwmblocks,   {.i = 3}},
-    {ClkStatusText,         0,        Button4,    sigdwmblocks,   {.i = 4}},
-    {ClkStatusText,         0,        Button5,    sigdwmblocks,   {.i = 5}},
-    {ClkStatusText,     ShiftMask,    Button1,    sigdwmblocks,   {.i = 6}},
-    {ClkStatusText,     ShiftMask,    Button3,    spawn,          SHCMD("st -e nvim ~/.local/src/dwmblocks.git/config.h")},
-    {ClkTagBar,             0,        Button1,    view,           {0}},
-    {ClkTagBar,             0,        Button3,    toggleview,     {0}},
-    {ClkTagBar,             0,        Button4,    shiftview,      {.i = -1}},
-    {ClkTagBar,             0,        Button5,    shiftview,      {.i = 1}},
-    {ClkTagBar,           MODKEY,     Button1,    tag,            {0}},
-    {ClkTagBar,           MODKEY,     Button3,    toggletag,      {0}},
-    {ClkWinTitle,           0,        Button2,    zoom,           {0}},
+    /* click             event mask      btn       function        arg */
+    { ClkClientWin,        MODKEY,     Button1,    movemouse,      {0} },
+    { ClkClientWin,        MODKEY,     Button3,    resizemouse,    {0} },
+    { ClkRootWin,            0,        Button2,    togglebar,      {0} },
+    { ClkStatusText,         0,        Button1,    sigdwmblocks,   {.i = 1} },
+    { ClkStatusText,         0,        Button2,    sigdwmblocks,   {.i = 2} },
+    { ClkStatusText,         0,        Button3,    sigdwmblocks,   {.i = 3} },
+    { ClkStatusText,         0,        Button4,    sigdwmblocks,   {.i = 4} },
+    { ClkStatusText,         0,        Button5,    sigdwmblocks,   {.i = 5} },
+    { ClkStatusText,     ShiftMask,    Button1,    sigdwmblocks,   {.i = 6} },
+    { ClkStatusText,     ShiftMask,    Button3,    spawn,          SHCMD("st -e nvim ~/.local/src/dwmblocks.git/config.h") },
+    { ClkTagBar,             0,        Button1,    view,           {0} },
+    { ClkTagBar,             0,        Button3,    toggleview,     {0} },
+    { ClkTagBar,             0,        Button4,    shiftview,      {.i = -1} },
+    { ClkTagBar,             0,        Button5,    shiftview,      {.i = 1} },
+    { ClkTagBar,           MODKEY,     Button1,    tag,            {0} },
+    { ClkTagBar,           MODKEY,     Button3,    toggletag,      {0} },
+    { ClkWinTitle,           0,        Button2,    zoom,           {0} },
 };
