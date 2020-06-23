@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-06-22 20:22:49
+ * @Last Modified time: 2020-06-22 20:45:04
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -11,11 +11,13 @@
 /* Appearance */
 /*------------*/
 static const unsigned int borderpx = 3; /* border pixel of windows */
-static const unsigned int gappx  = 5;  /* gap pixel between windows */
-static const unsigned int snap   = 32; /* snap pixel */
-static const int swallowfloating = 0;  /* 1 means swallow floating windows by default */
+static const unsigned int gappx    = 5;  /* gap pixel between windows */
+static const unsigned int snap     = 32; /* snap pixel */
+static const int swallowfloating   = 0;  /* 1 means swallow floating windows by default */
+/* Bar */
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar  = 0; /* 0 means bottom bar */
+
 static const char *fonts[] = { "Source Code Pro:size=10:antialias=true:autohint=true" };
 static char dmenufont[] =      "Source Code Pro:size=15";
 static char normbgcolor[]     = "#1c1c1c";
@@ -43,24 +45,23 @@ typedef struct {
   const char *name;
   const void *cmd;
 } Sp;
-const char *spcmd1[] = {"st", "-n", "spterm", "-g", "120x34", NULL};
-const char *spcmd2[] = {"st", "-n",    "spcalc", "-f", "monospace:size=16",
-                        "-g", "50x20", "-e",     "bc", "-lq",
-                        NULL};
+
+const char *sp_term[] = {"st", "-n", "st",     "-g", "120x34", NULL};
+const char *sp_fm[]   = {"st", "-n", "ranger", "-g", "120x50", "-e", "ranger", NULL};
 static Sp scratchpads[] = {
-    /* name        cmd */
-    {"spterm",   spcmd1},
-    {"spranger", spcmd2},
+    /* name         cmd  */
+    {"sp_term",   sp_term},
+    {"sp_fm",     sp_fm},
 };
 
-/* Tagging */
+/* Tags */
 static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 static const Rule rules[] = {
-    /* class    instance   title       tags mask  isfloating  isterminal  noswallow  monitor */
-    {"St",       NULL,      NULL,          0,         0,          1,          0,       -1},
-    {NULL,       NULL,  "Event Tester",    0,         0,          0,          1,       -1},
-    {NULL,     "spterm",    NULL,       SPTAG(0),     1,          1,          0,       -1},
-    {NULL,     "spcalc",    NULL,       SPTAG(1),     1,          1,          0,       -1},
+    /* class    instance      title       tags mask  isfloating  isterminal  noswallow  monitor */
+    {"St",       NULL,        NULL,          0,         0,          1,          0,       -1},
+    {NULL,       NULL,    "Event Tester",    0,         0,          0,          1,       -1},
+    {NULL,     "sp_term",     NULL,       SPTAG(0),     1,          1,          0,       -1},
+    {NULL,      "sp_fm",      NULL,       SPTAG(1),     1,          1,          0,       -1},
 };
 
 /* Layout(s) */
@@ -69,10 +70,10 @@ static const float facts[3]    = {1.1, 1.1, 1.1};          /* tiling facts */
 static const int   nmaster     = 1;                        /* number of clients in master area */
 static const int   resizehints = 1;                        /* 1 means respect size hints in tiled resizals */
 
-#define FORCE_VSPLIT  1     /* nrowgrid layout: force two clients to always split vertically */
+#define FORCE_VSPLIT  1 /* nrowgrid layout: force two clients to always split vertically */
 
 static const Layout layouts[] = {
-    {"[tiled]",   tile},    /* Master on left, slaves on right */
+    {"[tile]",    tile},    /* Master on left, slaves on right */
     {"[monocle]", monocle}, /* All windows on top of eachother */
     {NULL,        NULL},    /* Description here would be point(er)less */
 };
@@ -80,16 +81,22 @@ static const Layout layouts[] = {
 /* Key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY, TAG) \
-  {MODKEY,                           KEY,   view,              {.ui = 1 << TAG}}, \
-  {MODKEY | ControlMask,             KEY,   toggleview,        {.ui = 1 << TAG}}, \
-  {MODKEY | ShiftMask,               KEY,   tag,               {.ui = 1 << TAG}}, \
-  {MODKEY | ControlMask | ShiftMask, KEY,   toggletag,         {.ui = 1 << TAG}},
+        { MODKEY,                           KEY,   view,       {.ui = 1 << TAG} }, \
+        { MODKEY | ControlMask,             KEY,   toggleview, {.ui = 1 << TAG} }, \
+        { MODKEY | ShiftMask,               KEY,   tag,        {.ui = 1 << TAG} }, \
+        { MODKEY | ControlMask | ShiftMask, KEY,   toggletag,  {.ui = 1 << TAG} },
 
 /* X-Tile definitions */
 #define TILEKEYS(MOD,G,M,S) \
-	{ MOD, XK_r, setdirs,  {.v = (int[])  { INC(G * +1),   INC(M * +1),   INC(S * +1) } } }, \
+	{ MOD, XK_r, setdirs,  {.v = (int[])  { INC(G * +1),   INC(M * +1),   INC(S * +1) } } },   \
 	{ MOD, XK_h, setfacts, {.v = (float[]){ INC(G * -0.1), INC(M * -0.1), INC(S * -0.1) } } }, \
 	{ MOD, XK_l, setfacts, {.v = (float[]){ INC(G * +0.1), INC(M * +0.1), INC(S * +0.1) } } },
+
+/* Stack movement */
+#define STACKKEYS(MOD, ACTION) \
+        { MOD, XK_j, ACTION##stack, {.i = INC(+1)} }, \
+        { MOD, XK_k, ACTION##stack, {.i = INC(-1)} }, \
+        { MOD, XK_v, ACTION##stack, {.i = 0} },
 
 /* Spawning shell commands */
 #define SHCMD(cmd) { .v = (const char *[]) { "/bin/sh", "-c", cmd, NULL } }
@@ -106,9 +113,7 @@ static const char *termcmd[]  = {"st", NULL};
 #include "shiftview.c"
 #include <X11/XF86keysym.h>
 static Key keys[] = {
-    /*---------*/
-    /* Layouts */
-    /*---------*/
+    /* Tags */
     STACKKEYS(MODKEY, focus) STACKKEYS(MODKEY | ShiftMask, push)
     TAGKEYS(XK_1, 0) 
     TAGKEYS(XK_2, 1)
@@ -124,10 +129,10 @@ static Key keys[] = {
     TILEKEYS(MODKEY | ShiftMask,               0, 1, 0)
     TILEKEYS(MODKEY | ControlMask,             0, 0, 1)
     TILEKEYS(MODKEY | ShiftMask | ControlMask, 1, 1, 1)
-    /* modifier            key              function             argument  */
     /*-----------------*/
     /* Alphabetic keys */
     /*-----------------*/
+    /* modifier            key              function             argument  */
     /* A */
     /* B  */
     {MODKEY,               XK_b,             togglebar,          {0}},
@@ -150,8 +155,8 @@ static Key keys[] = {
     {MODKEY | ShiftMask,   XK_l,             setdirs,            {.v = (int[]){DirHor, DirVer, DirVer}}},
     {MODKEY | ControlMask, XK_l,             setdirs,            {.v = (int[]){DirVer, DirHor, DirHor}}},
     /* M */
-    {MODKEY,               XK_m,             setlayout,          {.v = &layouts[1]} },  
-    {MODKEY | ControlMask  XK_m,             spawn,              SHCMD("dmenu_music_options")},
+    {MODKEY,               XK_m,             setlayout,          {.v = &layouts[1]}},  
+    {MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options")},
     {MODKEY | ShiftMask,   XK_m,             spawn,              SHCMD("pamixer --toggle-mute; kill -44 $(pidof dwmblocks)")},
     /* N */
     {MODKEY,               XK_n,             spawn,              SHCMD("st -e nvim -c VimwikiIndex")},
@@ -175,7 +180,7 @@ static Key keys[] = {
     /* Punctuation keys */
     /* ' */
     {MODKEY,               XK_apostrophe,    togglescratch,      {.ui = 0}}, /* terminal scratchpad */
-    {MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* bc scratchpad */
+    {MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* file manager scratchpad */
     /* Backspace */
     {MODKEY,               XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
     {MODKEY | ShiftMask,   XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions")},
