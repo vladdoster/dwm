@@ -75,7 +75,7 @@ static const int   resizehints = 1;                        /* 1 means respect si
 static const Layout layouts[] = {
     {"[tile]",    tile},    /* Master on left, slaves on right */
     {"[monocle]", monocle}, /* All windows on top of eachother */
-    {NULL,        NULL},    /* Description here would be point(er)less */
+    {"[float]",      NULL}, /* Description here would be point(er)less */
 };
 
 /* Key definitions */
