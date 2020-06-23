@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-06-22 20:45:04
+ * @Last Modified time: 2020-06-22 22:00:07
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -132,7 +132,7 @@ static Key keys[] = {
     /*-----------------*/
     /* Alphabetic keys */
     /*-----------------*/
-    /* modifier             key              function             argument  */
+    /* modifier             key               function             argument  */
     /* A */
     /* B */
     { MODKEY,               XK_b,             togglebar,          { 0 } },
@@ -150,8 +150,6 @@ static Key keys[] = {
     { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* L */
-    { MODKEY | ShiftMask,   XK_l,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
-    { MODKEY | ControlMask, XK_l,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
@@ -161,6 +159,9 @@ static Key keys[] = {
     /* O */
     { MODKEY,               XK_o,             incnmaster,         { .i = +1 } },
     { MODKEY | ShiftMask,   XK_o,             incnmaster,         { .i = -1 } },
+    /* P */
+    { MODKEY | ShiftMask,   XK_p,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
+    { MODKEY | ControlMask, XK_p,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /* S */
     { MODKEY,               XK_s,             swapfocus,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_s,             togglesticky,       { 0 } },
@@ -177,6 +178,10 @@ static Key keys[] = {
     { MODKEY,               XK_0,             view,               { .ui = ~0 } },
     { MODKEY | ShiftMask,   XK_0,             tag,                { .ui = ~0 } },
     /* Punctuation keys */
+    /* , */
+    { MODKEY|ControlMask,   XK_comma,         cyclelayout,        { .i = -1 } },
+    /* . */
+    { MODKEY|ControlMask,   XK_period,        cyclelayout,        { .i = +1 } },
     /* ' */
     { MODKEY,               XK_apostrophe,    togglescratch,      { .ui = 0 } }, /* terminal scratchpad */
     { MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      { .ui = 1 } }, /* file manager scratchpad */
