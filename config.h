@@ -150,8 +150,6 @@ static Key keys[] = {
     { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* L */
-    { MODKEY | ShiftMask,   XK_l,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
-    { MODKEY | ControlMask, XK_l,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
@@ -171,7 +169,8 @@ static Key keys[] = {
     { MODKEY | ShiftMask,   XK_u,             spawn,              SHCMD("st -e htop") },
     /* W */
     { MODKEY,               XK_w,             spawn,              SHCMD("$BROWSER") },
-    { MODKEY | ShiftMask,   XK_w,             spawn,              SHCMD("st -e sudo nmtui") },
+    { MODKEY | ShiftMask,   XK_w,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
+    { MODKEY | ControlMask, XK_w,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /*--------------*/
     /* Numbers keys */
     /*--------------*/
@@ -225,9 +224,10 @@ static Key keys[] = {
     /* scroll lock */
     { MODKEY,               XK_Scroll_Lock,   spawn,              SHCMD("killall screenkey || screenkey &") },
     /* Function keys */
-    { MODKEY,               XK_F3,            spawn,              SHCMD("dmenu_display_options") },
-    { MODKEY,               XK_F4,            spawn,              SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)") },
-    { MODKEY,               XK_F5,            xrdb,               { .v = NULL } },
+    { MODKEY,               XK_F1,            spawn,              SHCMD("dmenu_display_options") },
+    { MODKEY,               XK_F2,            spawn,              SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)") },
+    { MODKEY,               XK_F3,            spawn,              SHCMD("st -e sudo nmtui") },
+    { MODKEY,               XK_F4,            xrdb,               { .v = NULL } },
 };
 /*--------------------*/
 /* Button definitions */
