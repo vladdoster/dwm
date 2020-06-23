@@ -19,7 +19,7 @@ static const int showbar = 1; /* 0 means no bar */
 static const int topbar  = 0; /* 0 means bottom bar */
 /* Font */
 static const char *fonts[] = { "Source Code Pro:size=10:antialias=true:autohint=true" };
-static char dmenufont[]    =      "Source Code Pro:size=15";
+static char dmenufont[]    =   "Source Code Pro:size=15";
 /* Colors */
 static char normbgcolor[]     = "#1c1c1c";
 static char normbordercolor[] = "#444444";
