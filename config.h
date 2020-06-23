@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-06-22 22:00:07
+ * @Last Modified time: 2020-06-23 08:28:33
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -18,7 +18,7 @@ static const int swallowfloating   = 0;  /* 1 means swallow floating windows by 
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar  = 0; /* 0 means bottom bar */
 /* Font */
-static const char *fonts[] = { "Source Code Pro:size=10:antialias=true:autohint=true" };
+static const char *fonts[] = { "monospace:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true"  };
 static char dmenufont[]    =   "Source Code Pro:size=15";
 /* Colors */
 static char normbgcolor[]     = "#1c1c1c";
