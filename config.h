@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-06-22 20:45:04
+ * @Last Modified time: 2020-06-22 21:50:14
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -132,7 +132,7 @@ static Key keys[] = {
     /*-----------------*/
     /* Alphabetic keys */
     /*-----------------*/
-    /* modifier             key              function             argument  */
+    /* modifier             key               function             argument  */
     /* A */
     /* B */
     { MODKEY,               XK_b,             togglebar,          { 0 } },
@@ -177,6 +177,10 @@ static Key keys[] = {
     { MODKEY,               XK_0,             view,               { .ui = ~0 } },
     { MODKEY | ShiftMask,   XK_0,             tag,                { .ui = ~0 } },
     /* Punctuation keys */
+    /* , */
+    { MODKEY|ControlMask,   XK_comma,         cyclelayout,        { .i = -1 } },
+    /* . */
+    { MODKEY|ControlMask,   XK_period,        cyclelayout,        { .i = +1 } },
     /* ' */
     { MODKEY,               XK_apostrophe,    togglescratch,      { .ui = 0 } }, /* terminal scratchpad */
     { MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      { .ui = 1 } }, /* file manager scratchpad */
