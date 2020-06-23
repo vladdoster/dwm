@@ -17,9 +17,10 @@ static const int swallowfloating   = 0;  /* 1 means swallow floating windows by 
 /* Bar */
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar  = 0; /* 0 means bottom bar */
-
+/* Font */
 static const char *fonts[] = { "Source Code Pro:size=10:antialias=true:autohint=true" };
-static char dmenufont[] =      "Source Code Pro:size=15";
+static char dmenufont[]    =      "Source Code Pro:size=15";
+/* Colors */
 static char normbgcolor[]     = "#1c1c1c";
 static char normbordercolor[] = "#444444";
 static char normfgcolor[]     = "#bbbbbb";
@@ -27,10 +28,9 @@ static char selfgcolor[]      = "#ffffff";
 static char selbordercolor[]  = "#9d0006";
 static char selbgcolor[]      = "#484848";
 static char *colors[][3] = {
-                    /*   fg           bg            border   */
-    [SchemeNorm] =  { normfgcolor, normbgcolor, normbordercolor },
-    [SchemeSel]  =  { selfgcolor,  selbgcolor,  selbordercolor },
-    /* color bar */
+                        /*   fg           bg            border   */
+    [SchemeNorm]     = { normfgcolor, normbgcolor, normbordercolor },
+    [SchemeSel]      = { selfgcolor,  selbgcolor,  selbordercolor },
     [SchemeStatus]   = { "#000000", "#5F6A6A", "#000000" }, // statusbar right
     [SchemeTagsSel]  = { "#000000", "#076678", "#1c1c1c" }, // tag bar left selected
     [SchemeTagsNorm] = { "#000000", "#5F6A6A", "#000000" }, // tag bar left unselected
@@ -49,9 +49,9 @@ typedef struct {
 const char *sp_term[] = { "st", "-n", "st",     "-g", "120x34", NULL };
 const char *sp_fm[]   = { "st", "-n", "ranger", "-g", "120x50", "-e", "ranger", NULL };
 static Sp scratchpads[] = {
-    /* name         cmd  */
-    { "sp_term",   sp_term },
-    { "sp_fm",     sp_fm },
+    /* name        cmd  */
+    { "sp_term", sp_term },
+    { "sp_fm",   sp_fm },
 };
 
 /* Tags */
@@ -132,41 +132,41 @@ static Key keys[] = {
     /*-----------------*/
     /* Alphabetic keys */
     /*-----------------*/
-    /* modifier            key              function             argument  */
+    /* modifier             key              function             argument  */
     /* A */
     /* B */
-    { MODKEY,               XK_b,             togglebar,          {0} },
+    { MODKEY,               XK_b,             togglebar,          { 0 } },
     /* C */
-    { MODKEY,               XK_c,             killclient,         {0} },
+    { MODKEY,               XK_c,             killclient,         { 0 } },
     /* D */
-    { MODKEY,               XK_d,             spawn,              {.v = dmenucmd} },
+    { MODKEY,               XK_d,             spawn,              { .v = dmenucmd } },
     /* E */
     { MODKEY,               XK_e,             spawn,              SHCMD("st -e nvim") },
     /* F */
-    { MODKEY,               XK_f,             setlayout,          {.v = &layouts[2]} },
+    { MODKEY,               XK_f,             setlayout,          { .v = &layouts[2] } },
     { MODKEY | ControlMask, XK_f,             spawn,              SHCMD("st -e ranger") },
-    { MODKEY | ShiftMask,   XK_f,             togglefullscr,      {0} },
+    { MODKEY | ShiftMask,   XK_f,             togglefullscr,      { 0 } },
     /* G */
-    { MODKEY,               XK_g,             shiftview,          {.i = -1} },
-    { MODKEY | ShiftMask,   XK_g,             shifttag,           {.i = -1} },
+    { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
+    { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* L */
-    { MODKEY | ShiftMask,   XK_l,             setdirs,            {.v = (int[]){DirHor, DirVer, DirVer}} },
-    { MODKEY | ControlMask, XK_l,             setdirs,            {.v = (int[]){DirVer, DirHor, DirHor}} },
+    { MODKEY | ShiftMask,   XK_l,             setdirs,            { .v = (int[]){ DirHor, DirVer, DirVer } } },
+    { MODKEY | ControlMask, XK_l,             setdirs,            { .v = (int[]){ DirVer, DirHor, DirHor } } },
     /* M */
-    { MODKEY,               XK_m,             setlayout,          {.v = &layouts[1]} },  
+    { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
     { MODKEY | ShiftMask,   XK_m,             spawn,              SHCMD("pamixer --toggle-mute; kill -44 $(pidof dwmblocks)") },
     /* N */
     { MODKEY,               XK_n,             spawn,              SHCMD("st -e nvim -c VimwikiIndex") },
     /* O */
-    { MODKEY,               XK_o,             incnmaster,         {.i = +1} },
-    { MODKEY | ShiftMask,   XK_o,             incnmaster,         {.i = -1} },
+    { MODKEY,               XK_o,             incnmaster,         { .i = +1 } },
+    { MODKEY | ShiftMask,   XK_o,             incnmaster,         { .i = -1 } },
     /* S */
-    { MODKEY,               XK_s,             swapfocus,          { .i = -1}},
-    { MODKEY | ShiftMask,   XK_s,             togglesticky,       {0} },
+    { MODKEY,               XK_s,             swapfocus,          { .i = -1 } },
+    { MODKEY | ShiftMask,   XK_s,             togglesticky,       { 0 } },
     /* T */
-    { MODKEY,               XK_t,             spawn,              {.v = termcmd} },
-    { MODKEY | ShiftMask,   XK_t,             setlayout,          {.v = &layouts[0]} },
+    { MODKEY,               XK_t,             spawn,              { .v = termcmd } },
+    { MODKEY | ShiftMask,   XK_t,             setlayout,          { .v = &layouts[0] } },
     /* U */
     { MODKEY | ShiftMask,   XK_u,             spawn,              SHCMD("st -e htop") },
     /* W */
@@ -175,12 +175,12 @@ static Key keys[] = {
     /*--------------*/
     /* Numbers keys */
     /*--------------*/
-    { MODKEY,               XK_0,             view,               {.ui = ~0} },
-    { MODKEY | ShiftMask,   XK_0,             tag,                {.ui = ~0} },
+    { MODKEY,               XK_0,             view,               { .ui = ~0 } },
+    { MODKEY | ShiftMask,   XK_0,             tag,                { .ui = ~0 } },
     /* Punctuation keys */
     /* ' */
-    { MODKEY,               XK_apostrophe,    togglescratch,      {.ui = 0}}, /* terminal scratchpad */
-    { MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      {.ui = 1}}, /* file manager scratchpad */
+    { MODKEY,               XK_apostrophe,    togglescratch,      { .ui = 0 } }, /* terminal scratchpad */
+    { MODKEY | ShiftMask,   XK_apostrophe,    togglescratch,      { .ui = 1 } }, /* file manager scratchpad */
     /* backspace */
     { MODKEY,               XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions") },
     { MODKEY | ShiftMask,   XK_BackSpace,     spawn,              SHCMD("dmenu_system_functions") },
@@ -193,28 +193,28 @@ static Key keys[] = {
     { MODKEY,               XK_equal,         spawn,              SHCMD("pamixer -i 5;  kill -44 $(pidof dwmblocks)") },
     { MODKEY | ShiftMask,   XK_equal,         spawn,              SHCMD("pamixer -i 15; kill -44 $(pidof dwmblocks)") },
     /* space */
-    { MODKEY,               XK_space,         zoom,               {0} },
-    { MODKEY | ShiftMask,   XK_space,         togglefloating,     {0} },
+    { MODKEY,               XK_space,         zoom,               { 0 } },
+    { MODKEY | ShiftMask,   XK_space,         togglefloating,     { 0 } },
     /* tab */
-    { MODKEY,               XK_Tab,           view,               {0} },
+    { MODKEY,               XK_Tab,           view,               { 0 } },
     /* ; */
-    { MODKEY,               XK_semicolon,     shiftview,          {.i = 1} },
-    { MODKEY | ShiftMask,   XK_semicolon,     shifttag,           {.i = 1} },
+    { MODKEY,               XK_semicolon,     shiftview,          { .i = 1 } },
+    { MODKEY | ShiftMask,   XK_semicolon,     shifttag,           { .i = 1 } },
     /*-----------------*/
     /* Navigation keys */
     /*-----------------*/
     /* left arrow */
-    { MODKEY,               XK_Left,          focusmon,           {.i = -1} },
-    { MODKEY | ShiftMask,   XK_Left,          tagmon,             {.i = -1} },
+    { MODKEY,               XK_Left,          focusmon,           { .i = -1 } },
+    { MODKEY | ShiftMask,   XK_Left,          tagmon,             { .i = -1 } },
     /* right arrow */
-    { MODKEY,               XK_Right,         focusmon,           {.i = +1} },
-    { MODKEY | ShiftMask,   XK_Right,         tagmon,             {.i = +1} },
+    { MODKEY,               XK_Right,         focusmon,           { .i = +1 } },
+    { MODKEY | ShiftMask,   XK_Right,         tagmon,             { .i = +1 } },
     /* page up */
-    { MODKEY,               XK_Page_Up,       shiftview,          {.i = -1} },
-    { MODKEY | ShiftMask,   XK_Page_Up,       shifttag,           {.i = -1} },
+    { MODKEY,               XK_Page_Up,       shiftview,          { .i = -1 } },
+    { MODKEY | ShiftMask,   XK_Page_Up,       shifttag,           { .i = -1 } },
     /* page down */
-    { MODKEY,               XK_Page_Down,     shiftview,          {.i = +1} },
-    { MODKEY | ShiftMask,   XK_Page_Down,     shifttag,           {.i = +1} },
+    { MODKEY,               XK_Page_Down,     shiftview,          { .i = +1 } },
+    { MODKEY | ShiftMask,   XK_Page_Down,     shifttag,           { .i = +1 } },
     /* insert */
     { MODKEY,               XK_Insert,        spawn,              SHCMD("show_clipboard_contents") },
     /* print screen */
@@ -227,28 +227,28 @@ static Key keys[] = {
     /* Function keys */
     { MODKEY,               XK_F3,            spawn,              SHCMD("dmenu_display_options") },
     { MODKEY,               XK_F4,            spawn,              SHCMD("dmenu_music_options; kill -44 $(pidof dwmblocks)") },
-    { MODKEY,               XK_F5,            xrdb,               {.v = NULL} },
+    { MODKEY,               XK_F5,            xrdb,               { .v = NULL } },
 };
 /*--------------------*/
 /* Button definitions */
 /*--------------------*/
 static Button buttons[] = {
     /* click             event mask      btn       function        arg */
-    { ClkClientWin,        MODKEY,     Button1,    movemouse,      {0} },
-    { ClkClientWin,        MODKEY,     Button3,    resizemouse,    {0} },
-    { ClkRootWin,            0,        Button2,    togglebar,      {0} },
-    { ClkStatusText,         0,        Button1,    sigdwmblocks,   {.i = 1} },
-    { ClkStatusText,         0,        Button2,    sigdwmblocks,   {.i = 2} },
-    { ClkStatusText,         0,        Button3,    sigdwmblocks,   {.i = 3} },
-    { ClkStatusText,         0,        Button4,    sigdwmblocks,   {.i = 4} },
-    { ClkStatusText,         0,        Button5,    sigdwmblocks,   {.i = 5} },
-    { ClkStatusText,     ShiftMask,    Button1,    sigdwmblocks,   {.i = 6} },
+    { ClkClientWin,        MODKEY,     Button1,    movemouse,      { 0 } },
+    { ClkClientWin,        MODKEY,     Button3,    resizemouse,    { 0 } },
+    { ClkRootWin,            0,        Button2,    togglebar,      { 0 } },
+    { ClkStatusText,         0,        Button1,    sigdwmblocks,   { .i = 1 } },
+    { ClkStatusText,         0,        Button2,    sigdwmblocks,   { .i = 2 } },
+    { ClkStatusText,         0,        Button3,    sigdwmblocks,   { .i = 3 } },
+    { ClkStatusText,         0,        Button4,    sigdwmblocks,   { .i = 4 } },
+    { ClkStatusText,         0,        Button5,    sigdwmblocks,   { .i = 5 } },
+    { ClkStatusText,     ShiftMask,    Button1,    sigdwmblocks,   { .i = 6 } },
     { ClkStatusText,     ShiftMask,    Button3,    spawn,          SHCMD("st -e nvim ~/.local/src/dwmblocks.git/config.h") },
-    { ClkTagBar,             0,        Button1,    view,           {0} },
-    { ClkTagBar,             0,        Button3,    toggleview,     {0} },
-    { ClkTagBar,             0,        Button4,    shiftview,      {.i = -1} },
-    { ClkTagBar,             0,        Button5,    shiftview,      {.i = 1} },
-    { ClkTagBar,           MODKEY,     Button1,    tag,            {0} },
-    { ClkTagBar,           MODKEY,     Button3,    toggletag,      {0} },
-    { ClkWinTitle,           0,        Button2,    zoom,           {0} },
+    { ClkTagBar,             0,        Button1,    view,           { 0 } },
+    { ClkTagBar,             0,        Button3,    toggleview,     { 0 } },
+    { ClkTagBar,             0,        Button4,    shiftview,      { .i = -1 } },
+    { ClkTagBar,             0,        Button5,    shiftview,      { .i = 1 } },
+    { ClkTagBar,           MODKEY,     Button1,    tag,            { 0 } },
+    { ClkTagBar,           MODKEY,     Button3,    toggletag,      { 0 } },
+    { ClkWinTitle,           0,        Button2,    zoom,           { 0 } },
 };
