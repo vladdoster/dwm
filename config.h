@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-07-06 21:22:36
+ * @Last Modified time: 2020-07-06 21:26:29
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -150,7 +150,7 @@ static Key keys[] = {
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* K */
     { MODKEY,               XK_k,             killclient,         { 0 } },
-    { MODKEY | ShiftMask,   XK_k,             spawn,              SHCMD("xkill") },
+    { MODKEY | ControlMask, XK_k,             spawn,              SHCMD("xkill") },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
