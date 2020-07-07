@@ -2,7 +2,7 @@
  * @Author: Vlad Doster <mvdoster@gmail.com>
  * @Date: 2020-06-22 11:49:08
  * @Last Modified by: Vlad Doster <mvdoster@gmail.com>
- * @Last Modified time: 2020-06-23 08:28:33
+ * @Last Modified time: 2020-07-06 21:22:36
  */
 
 /* See LICENSE file for copyright and license details. */
@@ -137,7 +137,6 @@ static Key keys[] = {
     /* B */
     { MODKEY,               XK_b,             togglebar,          { 0 } },
     /* C */
-    { MODKEY,               XK_c,             killclient,         { 0 } },
     /* D */
     { MODKEY,               XK_d,             spawn,              { .v = dmenucmd } },
     /* E */
@@ -149,7 +148,9 @@ static Key keys[] = {
     /* G */
     { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
-    /* L */
+    /* K */
+    { MODKEY,               XK_k,             killclient,         { 0 } },
+    { MODKEY | ShiftMask,   XK_k,             spawn,              SHCMD("xkill") },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
     { MODKEY | ControlMask, XK_m,             spawn,              SHCMD("dmenu_music_options") },
