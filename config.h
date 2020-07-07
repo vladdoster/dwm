@@ -137,6 +137,7 @@ static Key keys[] = {
     /* B */
     { MODKEY,               XK_b,             togglebar,          { 0 } },
     /* C */
+    { MODKEY,               XK_c,             killclient,         { 0 } },
     /* D */
     { MODKEY,               XK_d,             spawn,              { .v = dmenucmd } },
     /* E */
@@ -149,7 +150,6 @@ static Key keys[] = {
     { MODKEY,               XK_g,             shiftview,          { .i = -1 } },
     { MODKEY | ShiftMask,   XK_g,             shifttag,           { .i = -1 } },
     /* K */
-    { MODKEY,               XK_k,             killclient,         { 0 } },
     { MODKEY | ControlMask, XK_k,             spawn,              SHCMD("xkill") },
     /* M */
     { MODKEY,               XK_m,             setlayout,          { .v = &layouts[1] } },  
