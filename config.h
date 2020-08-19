@@ -249,7 +249,7 @@ static Button buttons[] = {
     { ClkStatusText,         0,        Button4,    sigdwmblocks,   { .i = 4 } },
     { ClkStatusText,         0,        Button5,    sigdwmblocks,   { .i = 5 } },
     { ClkStatusText,     ShiftMask,    Button1,    sigdwmblocks,   { .i = 6 } },
-    { ClkStatusText,     ShiftMask,    Button3,    spawn,          SHCMD("st -e nvim ~/.local/src/dwmblocks.git/config.h") },
+    { ClkStatusText,     ShiftMask,    Button3,    spawn,          SHCMD("st -e nvim ~/.local/src/dwm-blocks.git/config.h") },
     { ClkTagBar,             0,        Button1,    view,           { 0 } },
     { ClkTagBar,             0,        Button3,    toggleview,     { 0 } },
     { ClkTagBar,             0,        Button4,    shiftview,      { .i = -1 } },
